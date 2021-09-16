@@ -95,6 +95,7 @@ class DecisionTree:
     def print_tree(self, file: str) -> None:
         tree = graphviz.Digraph(
             filename=file,
+            format='png',
             graph_attr={
                 'rankdir': 'LR'
             },
@@ -122,4 +123,3 @@ class DecisionTree:
                     tree.edge(str(node.id), str(child.id), label=edge_labels[i])
 
         tree.render(file, view=True)
-        
