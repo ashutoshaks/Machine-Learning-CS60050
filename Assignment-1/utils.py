@@ -10,8 +10,8 @@ def entropy(labels: pd.Series) -> float:
 
 def information_gain(data: pd.DataFrame, labels: pd.Series, attr: str, split_val: Union[int, float]) -> float:
     filt = data[attr] < split_val
-    left_labels = pd.Series(labels[i] for i in df[~filt].index)
-    right_labels = pd.Series(labels[i] for i in df[filt].index)
+    left_labels = pd.Series(labels[i] for i in df[filt].index)
+    right_labels = pd.Series(labels[i] for i in df[~filt].index)
     gain = entropy(labels) - (len(left_labels) * entropy(left_labels) + len(right_labels) * entropy(right_labels))/len(labels)
     return gain
 
@@ -24,8 +24,8 @@ def gini_index(labels: pd.Series) -> float:
 def gini_gain(data: pd.DataFrame, labels: pd.Series, attr: str, split_val: Union[int, float]) -> float:
     initial_gain = gini_index(labels)
     filt = data[attr] < split_val
-    left_labels = pd.Series(labels[i] for i in df[~filt].index)
-    right_labels = pd.Series(labels[i] for i in df[filt].index)
+    left_labels = pd.Series(labels[i] for i in df[filt].index)
+    right_labels = pd.Series(labels[i] for i in df[~filt].index)
     final_gain = (len(left_labels) * gini_index(left_labels) + len(right_labels) * gini_index(right_labels)) / len(labels)
     return initial_gain - final_gain
 
