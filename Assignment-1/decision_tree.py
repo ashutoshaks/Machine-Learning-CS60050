@@ -3,6 +3,9 @@ import graphviz
 from typing import Dict, Tuple, Union
 from utils import find_best_split
 
+class DecisionTree:
+    pass
+
 class Node:
 
     def __init__(self, attr: str, split_val: Union[int, float], prob_label: int) -> None:
@@ -15,22 +18,28 @@ class Node:
     def is_leaf(self) -> bool:
         return (self.left is None) and (self.right is None)
 
+    def prune(self, tree: DecisionTree, accuracy: float, valid: pd.DataFrame):
+        pass
+
     def format_string(self) -> str:
         if self.is_leaf():
-            outcome = "Yes" if self.prob_label == 1 else "No"
-            return f"{self.attr}\n{outcome}"
+            outcome = 'Yes' if self.prob_label == 1 else 'No'
+            return f'{self.attr}\n{outcome}'
         else:
-            return f"{self.attr} < {self.split_val}"
+            return f'{self.attr} < {self.split_val}'
 
 
 class DecisionTree:
 
-    def __init__(self, max_depth: int = 30, min_samples: int = 1, measure: str = 'gini') -> None:
+    def __init__(self, measure: str = 'gini', max_depth: int = 30, min_samples: int = 1) -> None:
         self.root = None
+        self.measure = measure
         self.max_depth = max_depth
         self.min_samples = min_samples
-        self.measure = measure
         self.tree_depth = 0
+
+    def train(self, train_data: pd.DataFrame, train_labels: pd.Series) -> None:
+        self.root = self.build_tree(train_data, train_labels)
 
     def build_tree(self, train_data: pd.DataFrame, train_labels: pd.Series, depth: int = 0) -> Node:
         if (depth == self.max_depth) or (len(train_data) <= self.min_samples) or (len(train_labels.unique()) == 1):
@@ -96,11 +105,11 @@ class DecisionTree:
         tree = graphviz.Digraph(
             filename=file,
             format='png',
-            graph_attr={
-                'rankdir': 'LR'
-            },
+            # graph_attr={
+            #     'rankdir': 'LR'
+            # },
             node_attr={
-                'shape': 'Rectangle'
+                'shape': 'box'
             }
         )
 
@@ -123,3 +132,25 @@ class DecisionTree:
                     tree.edge(str(node.id), str(child.id), label=edge_labels[i])
 
         tree.render(file, view=True)
+
+
+if __name__ == '__main__':
+    n0 = Node('n0', 5, 1)
+    n1 = Node('n1', 1, 0)
+    n2 = Node('n2', 2, 0)
+    n3 = Node('n3', 3, 0)
+    n4 = Node('n4', 4, 1)
+    n5 = Node('n5', 5, 0)
+    n6 = Node('n6', 6, 1)
+
+    n0.left = n1
+    n0.right = n2
+    n1.left = n3
+    n1.right = n4
+    n2.left = n5
+    n2.left = n6
+
+    dt = DecisionTree()
+    dt.root = n0
+    dt.print_tree('demo.gv')
+    
