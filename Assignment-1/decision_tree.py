@@ -1,4 +1,5 @@
 import pandas as pd
+import graphviz
 from typing import Dict, Tuple, Union
 from utils import find_best_split
 
@@ -13,6 +14,13 @@ class Node:
 
     def is_leaf(self) -> bool:
         return (self.left is None) and (self.right is None)
+
+    def format_string(self) -> str:
+        if self.is_leaf():
+            outcome = "Yes" if self.prob_label == 1 else "No"
+            return f"{self.attr}\n{outcome}"
+        else:
+            return f"{self.attr} < {self.split_val}"
 
 
 class DecisionTree:
@@ -78,4 +86,40 @@ class DecisionTree:
         predictions = pd.Series([self.predict_one(row, self.root) for row in test_data.to_dict(orient='records')])
         return predictions
 
+    def get_pred_accuracy(self, test_data: pd.DataFrame, test_labels: pd.Series) -> Tuple[pd.Series, float]:
+        preds = self.predict(test_data)
+        comp = (preds == test_labels)
+        accuracy = comp.astype('int32').mean() * 100.0
+        return (preds, accuracy)
+
+    def print_tree(self, file: str) -> None:
+        tree = graphviz.Digraph(
+            filename=file,
+            graph_attr={
+                'rankdir': 'LR'
+            },
+            node_attr={
+                'shape': 'Rectangle'
+            }
+        )
+
+        root = self.root
+        queue = []
+        queue.append(root)
+        root.id = 0
+        tree.node(str(root.id), label=root.format_string())
+        uid = 1
+        edge_labels = ['True', 'False']
+        
+        while(len(queue) > 0):
+            node = queue.pop(0)
+            for i, child in enumerate([node.left, node.right]):
+                if child != None:
+                    child.id = uid
+                    uid += 1
+                    queue.append(child)
+                    tree.node(str(child.id), label=child.format_string())
+                    tree.edge(str(node.id), str(child.id), label=edge_labels[i])
+
+        tree.render(file, view=True)
         
