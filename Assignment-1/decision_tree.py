@@ -1,6 +1,6 @@
 import pandas as pd
 from typing import Dict, Tuple, Union
-from utils import find_best_split
+import utils
 
 class Node:
 
@@ -51,7 +51,7 @@ class DecisionTree:
         best_attr = None
         best_split_val = None
         for attr in attributes:
-            split_val, gain = find_best_split(train_data, train_labels, attr, self.measure)
+            split_val, gain = utils.find_best_split(train_data, train_labels, attr, self.measure)
             if gain > max_gain:
                 max_gain = gain
                 best_attr = attr
