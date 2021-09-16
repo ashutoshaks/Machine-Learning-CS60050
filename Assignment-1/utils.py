@@ -10,8 +10,8 @@ def entropy(labels: pd.Series) -> float:
 
 def information_gain(data: pd.DataFrame, labels: pd.Series, attr: str, split_val: Union[int, float]) -> float:
     filt = data[attr] < split_val
-    left_labels = pd.Series(labels[i] for i in df[filt].index)
-    right_labels = pd.Series(labels[i] for i in df[~filt].index)
+    left_labels = labels[filt]
+    right_labels = labels[filt]
     gain = entropy(labels) - (len(left_labels) * entropy(left_labels) + len(right_labels) * entropy(right_labels))/len(labels)
     return gain
 
@@ -24,8 +24,8 @@ def gini_index(labels: pd.Series) -> float:
 def gini_gain(data: pd.DataFrame, labels: pd.Series, attr: str, split_val: Union[int, float]) -> float:
     initial_gain = gini_index(labels)
     filt = data[attr] < split_val
-    left_labels = pd.Series(labels[i] for i in df[filt].index)
-    right_labels = pd.Series(labels[i] for i in df[~filt].index)
+    left_labels = labels[filt]
+    right_labels = labels[filt]
     final_gain = (len(left_labels) * gini_index(left_labels) + len(right_labels) * gini_index(right_labels)) / len(labels)
     return initial_gain - final_gain
 
@@ -33,17 +33,14 @@ def find_best_split(data: pd.DataFrame, labels: pd.Series, attr: str, measure: s
     sorted = data.sort_values(by=attr)[attr].tolist()
     best_gain = 0
     best_split_val = None
-    if measure == INFORMATION_GAIN:
-        for i in range(len(sorted)-1):
-            split_val = (sorted[i]+sorted[i+1])/2
+    for i in range(len(sorted)-1):
+        split_val = (sorted[i]+sorted[i+1])/2
+        if measure == 'ig':
             gain = information_gain(data, labels, attr, split_val)
-            if best_gain < gain:
-                best_gain = gain
-                best_split_val = split_val
-    else:
-        for i in range(len(sorted)-1):
-            split_val = (sorted[i]+sorted[i+1])/2
+        else:
             gain = gini_gain(data, labels, attr, split_val)
-            if best_gain < gain:
-                best_gain = gain
-                best_split_val = split_val
+        if best_gain < gain:
+            best_gain = gain
+            best_split_val = split_val
+
+    return (best_split_val, best_gain)
