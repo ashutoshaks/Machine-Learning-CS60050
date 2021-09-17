@@ -1,26 +1,25 @@
 import pandas as pd
 import graphviz
-from typing import Dict, Tuple, Union
 from utils import find_best_split, split_df_col, get_pred_accuracy
 
 
-class DecisionTree:
+class DecisionTree:     # Forward declaration
     pass
 
 
 class Node:
     """
-    The Node class for our decision tree
-    It contains the attributes required for each node and functions for various tasks
+    The Node class for our decision tree.
+    It contains the attributes required for each node and functions for various tasks.
     """
 
-    def __init__(self, attr: str, split_val: Union[int, float], prob_label: int) -> None:
+    def __init__(self, attr, split_val, prob_label):
         """
-        Initializes a node with proper values
+        Initializes a node with proper values.
 
         Args:
             attr (str): The decision attribute selected for the node
-                    on the basis of which we split the tree further
+                    on the basis of which we split the tree further.
 
             split_val (Union[int, float]): The value on whose basis splitting is done.
                     All data points with value of attr < split_val go to the left subtree,
@@ -37,65 +36,72 @@ class Node:
         self.right = None
 
 
-    def is_leaf(self) -> bool:
+    def is_leaf(self):
         """
-        Checks if the given node is a leaf
+        Checks if the given node is a leaf.
 
         Returns:
-            bool: True, if the node is a leaf, otherwise False
+            bool: True, if the node is a leaf, otherwise False.
         """
         return (self.left is None) and (self.right is None)
 
     
-    def node_count(self) -> int:
+    def node_count(self):
         """
-        Finds the number of nodes in the subtree rooted at the given node
+        Finds the number of nodes in the subtree rooted at the given node.
 
         Returns:
-            int: Number of nodes in the subtree
+            int: Number of nodes in the subtree.
         """
         left_count, right_count = 0, 0
         if self.left != None:
-            left_count = self.left.node_count()
+            left_count = self.left.node_count()         # recurse on left subtree
         if self.right != None:
-            right_count = self.right.node_count()
+            right_count = self.right.node_count()       # recurse on right subtree
         return 1 + left_count + right_count
         
 
-    def prune(self, tree: DecisionTree, accuracy: float, valid: pd.DataFrame) -> float:
+    def prune(self, tree, accuracy, valid):
         """
         Prunes a node by recursively first pruning the subtree of this node,
-        and then checks if the cuurent node can be pruned. Pruning continues till
-        the accuracy on the validation set increases
+        and then checks if the current node can be pruned. Pruning continues till
+        the accuracy on the validation set increases.
 
         Args:
-            tree (DecisionTree): The decision tree that is being pruned
+            tree (DecisionTree): The decision tree that is being pruned.
 
             accuracy (float): The best accuracy on the validation set that can 
-                    be achieved till now
+                    be achieved till now.
 
             valid (pd.DataFrame): The validation set used for calculating accuracy
-                    while pruning
+                    while pruning.
 
         Returns:
             float: If pruning the current node increases the accuracy, then return the 
                     updated accuracy after pruning this node, else return the original
-                    accuracy
+                    accuracy.
         """
         new_acc = 0
+
+        # cannot prune leaf nodes
         if self.left is None and self.right is None:
             return accuracy
-        if self.left != None:
-            new_acc = self.left.prune(tree, accuracy, valid)
-        if self.right != None:
-            new_acc = self.right.prune(tree, new_acc, valid)
 
+        if self.left != None:
+            new_acc = self.left.prune(tree, accuracy, valid)        # prune left subtree
+        if self.right != None:
+            new_acc = self.right.prune(tree, new_acc, valid)        # prune right subtree
+
+        # temporarily store left and right children
         left, right = self.left, self.right
+
+        # temprarily remove the children of the current node
         self.left = None
         self.right = None
 
         _, temp_acc = get_pred_accuracy(tree, valid)
 
+        # decide if we will prune this node or node
         if temp_acc < new_acc or tree.root.node_count() <= 5:
             self.left, self.right = left, right
         else:
@@ -105,12 +111,12 @@ class Node:
         return new_acc
 
 
-    def format_string(self) -> str:
+    def format_string(self):
         """
-        Generates the string to be displayed in each node while printing the tree
+        Generates the string to be displayed in each node while printing the tree.
 
         Returns:
-            str: A string to be displayed, depending on whether the node is a leaf or not
+            str: A string to be displayed, depending on whether the node is a leaf or not.
         """
         if self.is_leaf():
             outcome = 'Yes' if self.prob_label == 1 else 'No'
@@ -130,13 +136,13 @@ class DecisionTree:
     for various operations of the decision tree.
     """
 
-    def __init__(self, measure: str = 'gini', max_depth: int = 15, min_samples: int = 1) -> None:
+    def __init__(self, measure='ig', max_depth=10, min_samples=1):
         """
-        Initializes a decision tree with proper metadata
+        Initializes a decision tree with proper metadata.
 
         Args:
             measure (str, optional): The impurity measure to be used - information gain,
-                    or gini index. Defaults to 'gini'.
+                    or gini index. Defaults to 'ig'.
 
             max_depth (int, optional): Maxmimum depth of the decision tree. Defaults to 15.
 
@@ -150,24 +156,49 @@ class DecisionTree:
         self.tree_depth = 0
 
 
-    def train(self, train: pd.DataFrame) -> None:
+    def train(self, train):
+        """
+        Trains the decision tree model.
+
+        Args:
+            train (pd.DataFrame): The training dataset.
+        """
         train_data, train_labels = split_df_col(train)
         self.root = self.build_tree(train_data, train_labels)
         
 
-    def build_tree(self, train_data: pd.DataFrame, train_labels: pd.Series, depth: int = 0) -> Node:
+    def build_tree(self, train_data, train_labels, depth=0):
+        """
+        Builds the entire decision tree recursively, by deciding which attribute
+        to split on, divides the data into two parts, and then calls the same
+        function for the left and right subtrees.
+
+        Args:
+            train_data (pd.DataFrame): The training dataset without the output labels.
+
+            train_labels (pd.Series): The output labels for each row in the training dataset.
+
+            depth (int, optional): Depth of the current node. Defaults to 0.
+
+        Returns:
+            Node: Root node of the tree
+        """
+
+        # if maximum depth is reached, or if we do not have enough samples, or all the samples have the same outcome label
+        # then make this node a leaf
         if (depth == self.max_depth) or (len(train_data) <= self.min_samples) or (len(train_labels.unique()) == 1):
             return self.create_leaf(train_labels)
 
         attr, split_val = self.get_best_attribute(train_data, train_labels)
         node = Node(attr, split_val, train_labels.value_counts().idxmax())
 
+        # create left partition for data[attr] < split_val
         filt = train_data[attr] < split_val
-
         left_data = train_data[filt]
         left_labels = train_labels[filt]
         node.left = self.build_tree(left_data, left_labels, depth + 1)
 
+        # create right partition for data[attr] >= split_val
         right_data = train_data[~filt]
         right_labels = train_labels[~filt]
         node.right = self.build_tree(right_data, right_labels, depth + 1)
@@ -176,11 +207,25 @@ class DecisionTree:
         return node
 
 
-    def get_best_attribute(self, train_data: pd.DataFrame, train_labels: pd.Series) -> Tuple[str, Union[int, float]]:
+    def get_best_attribute(self, train_data, train_labels):
+        """
+        Finds the best attribute on the basis of which splitting should be done.
+
+        Args:
+            train_data (pd.DataFrame): The training dataset without the output labels.
+
+            train_labels (pd.Series): The output labels for each row in the training dataset.
+
+        Returns:
+            Tuple[str, Union[int, float]]: The best attribute found, and the corresponding
+                    value of that attribute around which we should split.
+        """
         attributes = train_data.columns
         max_gain = -10**20
         best_attr = None
         best_split_val = None
+
+        # iterate on all attributes to choose the best one
         for attr in attributes:
             split_val, gain = find_best_split(train_data, train_labels, attr, self.measure)
             if gain > max_gain:
@@ -190,12 +235,33 @@ class DecisionTree:
         return (best_attr, best_split_val)
 
 
-    def create_leaf(self, labels: pd.Series) -> Node:
+    def create_leaf(self, labels):
+        """
+        Creates and returns a leaf node for the decision tree.
+
+        Args:
+            labels (pd.Series): The output labels of the data points at this node.
+
+        Returns:
+            Node: The leaf node created.
+        """
         prob_label = labels.value_counts().idxmax()
         return Node('Outcome', None, prob_label)
 
 
-    def predict_one(self, test_dict: Dict, root: Node) -> int:
+    def predict_one(self, test_dict, root):
+        """
+        Predicts the outcome of a single sample on the basis of the decision tree created.
+
+        Args:
+            test_dict (Dict): A dictionary containing the attributes and corresponding values
+                    of the data point.
+
+            root (Node): Current node while traversing the tree for finding the predicted outcome.
+
+        Returns:
+            int: 0 or 1, the prediction found from the decision tree.
+        """
         if root is None:
             return None
         if root.is_leaf():
@@ -206,12 +272,27 @@ class DecisionTree:
             return self.predict_one(test_dict, root.right)
 
 
-    def predict(self, test_data: pd.DataFrame) -> pd.Series:
+    def predict(self, test_data):
+        """
+        Predicts the outcome on a set of test data.
+
+        Args:
+            test_data (pd.DataFrame): The test dataset for which predictions are to be made.
+
+        Returns:
+            pd.Series: Predicted outcomes (series of 0, 1 values) for the test dataset.
+        """
         predictions = pd.Series([self.predict_one(row, self.root) for row in test_data.to_dict(orient='records')])
         return predictions
 
 
-    def print_tree(self, file: str) -> None:
+    def print_tree(self, file):
+        """
+        Prints the decision tree in a neat format using the graphviz library.
+
+        Args:
+            file (str): File name with which the image of the tree is to be saved. 
+        """
         tree = graphviz.Digraph(filename=file, format='png', node_attr={'shape': 'box'})
         root = self.root
         queue = []
@@ -221,6 +302,7 @@ class DecisionTree:
         uid = 1
         edge_labels = ['True', 'False']
         
+        # print the tree using a breadth first search
         while(len(queue) > 0):
             node = queue.pop(0)
             for i, child in enumerate([node.left, node.right]):
