@@ -1,14 +1,35 @@
 import pandas as pd
 import graphviz
 from typing import Dict, Tuple, Union
-from utils import find_best_split, split_df_col
+from utils import find_best_split, split_df_col, get_pred_accuracy
+
 
 class DecisionTree:
     pass
 
+
 class Node:
+    """
+    The Node class for our decision tree
+    It contains the attributes required for each node and functions for various tasks
+    """
 
     def __init__(self, attr: str, split_val: Union[int, float], prob_label: int) -> None:
+        """
+        Initializes a node with proper values
+
+        Args:
+            attr (str): The decision attribute selected for the node
+                    on the basis of which we split the tree further
+
+            split_val (Union[int, float]): The value on whose basis splitting is done.
+                    All data points with value of attr < split_val go to the left subtree,
+                    and all with value >= split_val go to the right subtree.
+
+            prob_label (int): This is the most probable outcome if we were to convert this 
+                    node to a leaf. It is calculated by determining which outcome (0 or 1) 
+                    occurs the most in the data points we have at this node.
+        """
         self.attr = attr
         self.split_val = split_val
         self.prob_label = prob_label
@@ -17,10 +38,22 @@ class Node:
 
 
     def is_leaf(self) -> bool:
+        """
+        Checks if the given node is a leaf
+
+        Returns:
+            bool: True, if the node is a leaf, otherwise False
+        """
         return (self.left is None) and (self.right is None)
 
     
     def node_count(self) -> int:
+        """
+        Finds the number of nodes in the subtree rooted at the given node
+
+        Returns:
+            int: Number of nodes in the subtree
+        """
         left_count, right_count = 0, 0
         if self.left != None:
             left_count = self.left.node_count()
@@ -30,6 +63,25 @@ class Node:
         
 
     def prune(self, tree: DecisionTree, accuracy: float, valid: pd.DataFrame) -> float:
+        """
+        Prunes a node by recursively first pruning the subtree of this node,
+        and then checks if the cuurent node can be pruned. Pruning continues till
+        the accuracy on the validation set increases
+
+        Args:
+            tree (DecisionTree): The decision tree that is being pruned
+
+            accuracy (float): The best accuracy on the validation set that can 
+                    be achieved till now
+
+            valid (pd.DataFrame): The validation set used for calculating accuracy
+                    while pruning
+
+        Returns:
+            float: If pruning the current node increases the accuracy, then return the 
+                    updated accuracy after pruning this node, else return the original
+                    accuracy
+        """
         new_acc = 0
         if self.left is None and self.right is None:
             return accuracy
@@ -38,13 +90,11 @@ class Node:
         if self.right != None:
             new_acc = self.right.prune(tree, new_acc, valid)
 
-        # _, accuracy = tree.get_pred_accuracy(valid)
-
         left, right = self.left, self.right
         self.left = None
         self.right = None
 
-        _, temp_acc = tree.get_pred_accuracy(valid)
+        _, temp_acc = get_pred_accuracy(tree, valid)
 
         if temp_acc < new_acc or tree.root.node_count() <= 5:
             self.left, self.right = left, right
@@ -56,16 +106,43 @@ class Node:
 
 
     def format_string(self) -> str:
+        """
+        Generates the string to be displayed in each node while printing the tree
+
+        Returns:
+            str: A string to be displayed, depending on whether the node is a leaf or not
+        """
         if self.is_leaf():
             outcome = 'Yes' if self.prob_label == 1 else 'No'
             return f'{self.attr}\n{outcome}'
         else:
-            return f'{self.attr} < {self.split_val}'
+            if self.attr == 'DiabetesPedigreeFunction':
+                return f'{self.attr} <\n {self.split_val:.4f}'
+            elif self.attr == 'BMI':
+                return f'{self.attr} < {self.split_val:.4f}'
+            else:
+                return f'{self.attr} < {self.split_val}'
 
 
 class DecisionTree:
+    """
+    The main Decision Tree class having metadata for the decision tree, and functions
+    for various operations of the decision tree.
+    """
 
-    def __init__(self, measure: str = 'gini', max_depth: int = 10, min_samples: int = 1) -> None:
+    def __init__(self, measure: str = 'gini', max_depth: int = 15, min_samples: int = 1) -> None:
+        """
+        Initializes a decision tree with proper metadata
+
+        Args:
+            measure (str, optional): The impurity measure to be used - information gain,
+                    or gini index. Defaults to 'gini'.
+
+            max_depth (int, optional): Maxmimum depth of the decision tree. Defaults to 15.
+
+            min_samples (int, optional): Minimum number of samples that must be present to
+                    branch the tree further. Defaults to 1.
+        """
         self.root = None
         self.measure = measure
         self.max_depth = max_depth
@@ -123,7 +200,6 @@ class DecisionTree:
             return None
         if root.is_leaf():
             return root.prob_label
-
         if test_dict[root.attr] < root.split_val:
             return self.predict_one(test_dict, root.left)
         else:
@@ -135,23 +211,8 @@ class DecisionTree:
         return predictions
 
 
-    def get_pred_accuracy(self, test: pd.DataFrame) -> Tuple[pd.Series, float]:
-        test_data, test_labels = split_df_col(test)
-        preds = self.predict(test_data)
-        comp = (preds.reset_index(drop=True) == test_labels.reset_index(drop=True))
-        accuracy = comp.astype('int32').mean() * 100.0
-        return (preds, accuracy)
-
-
     def print_tree(self, file: str) -> None:
-        tree = graphviz.Digraph(
-            filename=file,
-            format='png',
-            node_attr={
-                'shape': 'box'
-            }
-        )
-
+        tree = graphviz.Digraph(filename=file, format='png', node_attr={'shape': 'box'})
         root = self.root
         queue = []
         queue.append(root)
