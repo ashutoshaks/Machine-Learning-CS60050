@@ -1,7 +1,34 @@
 import argparse
 import pandas as pd
 from decision_tree import DecisionTree
-from utils import f1_score, split_data, save_plot, split_df_col, get_pred_accuracy, dt_utility
+from utils import f1_score, split_data, save_plot, split_df_col, get_pred_accuracy
+
+
+def dt_utility(train, test, max_depth, measure='ig'):
+    """
+    Creates a decision tree from the given train and test set and finds the accuracy 
+    on the train and test sets.
+
+    Args:
+        train (pd.DataFrame): The training dataset.
+
+        test (pd.DataFrame): The test dataset.
+
+        max_depth (int): The maximum depth allowed for the decision tree.
+
+        measure (str): The impurity measure to be used, information gain, or gini index. 
+                Defaults to 'ig'.
+
+    Returns:
+        Tuple[DecisionTree, float, float]: The decision tree, accuracy on training set, and 
+                accuracy on test set.
+    """
+    tree = DecisionTree(measure, max_depth)
+    tree.train(train)
+    _, train_acc = get_pred_accuracy(tree, train)
+    _, test_acc = get_pred_accuracy(tree, test)
+
+    return (tree, train_acc, test_acc)
 
 
 def compare_measures(train, test, max_depth):
