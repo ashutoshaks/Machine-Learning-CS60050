@@ -57,22 +57,21 @@ def vary_depth_nodes(df: pd.DataFrame, measure: str) -> None:
     max_acc = [0] * (d_lim + 1)
     acc = [0] * (d_lim + 1)
     for iter in range(10):
-        print(f'Iteration {iter + 1}')
         train, test = split_data(df, 0.8, 0.2)
         for d in range(1, d_lim + 1):
             tree, train_acc, test_acc = dt_utility(train, test, d, measure)
             if test_acc > max_acc[d]:
                 trees[d] = tree
+                max_acc[d] = test_acc
             count = tree.root.node_count()
             node_dict[count] = test_acc
-            print(f'Depth: {d}, Train Accuracy: {train_acc:.4f}% Average Accuracy: {test_acc:.4f}%')
             acc[d] += test_acc
         print()
 
+    acc = [x / 10 for x in acc]
     for i in range(1, d_lim + 1):
         depths.append(i)
-    acc = [x / 10 for x in acc]
-    print(acc)
+        print(f'Depth: {i}, Average Accuracy: {acc[i]:.4f}%')
     best_depth = acc.index(max(acc))
     trees[best_depth].print_tree('best_depth.gv')
     print(f'Best Depth: {best_depth}')
