@@ -2,10 +2,8 @@ import pandas as pd
 import graphviz
 from utils import find_best_split, split_df_col, get_pred_accuracy
 
-
 class DecisionTree:     # Forward declaration
     pass
-
 
 class Node:
     """
@@ -288,7 +286,7 @@ class DecisionTree:
 
     def print_tree(self, file):
         """
-        Prints the decision tree in a neat format using the graphviz library.
+        Prints the decision tree in a neat format using the graphviz package.
 
         Args:
             file (str): File name with which the image of the tree is to be saved. 

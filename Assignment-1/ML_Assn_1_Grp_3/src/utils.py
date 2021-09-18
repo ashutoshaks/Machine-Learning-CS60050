@@ -3,10 +3,8 @@ import pandas as pd
 import math
 from matplotlib import pyplot as plt
 
-
 class DecisionTree:     # Forward declaration
     pass
-
 
 def entropy(labels):
     """
@@ -93,7 +91,7 @@ def find_best_split(data, labels, attr, measure):
     """
     Finds the best value of an attribute for splitting, given that particular attribute.
     Sort the values taken by the attribute in ascending order. Then for the midpoint of each
-    pair of consecutive values, check the feasibilty of that point for splitting.
+    pair of consecutive values, check the feasibility of that point for splitting.
 
     Args:
         data (pd.DataFrame): The dataset we are working with, which needs to be split.
@@ -214,7 +212,7 @@ def save_plot(x, y, param):
 
 def precision(preds, labels):
     """
-    Calculates the precision value based on predicitions and true labels.
+    Calculates the precision value based on predictions and true labels.
     Precision = True Positive / (True Positive + False Positive)
 
     Args:
@@ -231,8 +229,8 @@ def precision(preds, labels):
 
 def recall(preds, labels):
     """
-    Calculates the recall value based on predicitions and true labels.
-    Precision = True Positive / (True Positive + False Neagtive)
+    Calculates the recall value based on predictions and true labels.
+    Recall = True Positive / (True Positive + False Negative)
 
     Args:
         preds (pd.Series): The prediction values.
@@ -248,7 +246,7 @@ def recall(preds, labels):
 
 def f1_score(preds, labels):
     """
-    Calculates the F1 score based on predicitions and true labels.
+    Calculates the F1 score based on predictions and true labels.
     It is the harmonic mean of the precision and recall.
 
     Args:

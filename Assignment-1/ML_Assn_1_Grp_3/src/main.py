@@ -3,10 +3,9 @@ import pandas as pd
 from decision_tree import DecisionTree
 from utils import f1_score, split_data, save_plot, split_df_col, get_pred_accuracy
 
-
 def dt_utility(train, test, max_depth, measure='ig'):
     """
-    Creates a decision tree from the given train and test set and finds the accuracy 
+    Returns a decision tree from the given train and test set and its accuracy 
     on the train and test sets.
 
     Args:
@@ -58,7 +57,7 @@ def compare_measures(train, test, max_depth):
 
 def select_best_tree(train, test, max_depth, measure='ig', num_splits=10):
     """
-    Generated 10 decision trees based on 10 random 80/20 splits of the data, finds the 
+    Generates 10 decision trees based on 10 random 80/20 splits of the data, finds the 
     average accuracy and returns the one with the best test accuracy.
 
     Args:
