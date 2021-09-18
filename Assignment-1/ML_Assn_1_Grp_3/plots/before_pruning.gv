@@ -1,0 +1,308 @@
+digraph {
+	node [shape=box]
+	0 [label="Glucose < 121.5"]
+	1 [label="Pregnancies < 6.5"]
+	0 -> 1 [label=True]
+	2 [label="Glucose < 160.0"]
+	0 -> 2 [label=False]
+	3 [label="BMI < 26.9500"]
+	1 -> 3 [label=True]
+	4 [label="DiabetesPedigreeFunction <
+ 0.8635"]
+	1 -> 4 [label=False]
+	5 [label="Age < 24.5"]
+	2 -> 5 [label=True]
+	6 [label="Pregnancies < 6.5"]
+	2 -> 6 [label=False]
+	7 [label="Outcome
+No"]
+	3 -> 7 [label=True]
+	8 [label="BMI < 45.4000"]
+	3 -> 8 [label=False]
+	9 [label="Age < 32.5"]
+	4 -> 9 [label=True]
+	10 [label="Outcome
+Yes"]
+	4 -> 10 [label=False]
+	11 [label="DiabetesPedigreeFunction <
+ 0.4005"]
+	5 -> 11 [label=True]
+	12 [label="BloodPressure < 91.0"]
+	5 -> 12 [label=False]
+	13 [label="Age < 30.5"]
+	6 -> 13 [label=True]
+	14 [label="Outcome
+Yes"]
+	6 -> 14 [label=False]
+	15 [label="Age < 29.5"]
+	8 -> 15 [label=True]
+	16 [label="Glucose < 101.0"]
+	8 -> 16 [label=False]
+	17 [label="BMI < 26.2000"]
+	9 -> 17 [label=True]
+	18 [label="SkinThickness < 26.5"]
+	9 -> 18 [label=False]
+	19 [label="Outcome
+No"]
+	11 -> 19 [label=True]
+	20 [label="DiabetesPedigreeFunction <
+ 0.6500"]
+	11 -> 20 [label=False]
+	21 [label="BMI < 47.2000"]
+	12 -> 21 [label=True]
+	22 [label="Outcome
+Yes"]
+	12 -> 22 [label=False]
+	23 [label="BMI < 28.2000"]
+	13 -> 23 [label=True]
+	24 [label="Glucose < 165.5"]
+	13 -> 24 [label=False]
+	25 [label="SkinThickness < 29.5"]
+	15 -> 25 [label=True]
+	26 [label="SkinThickness < 31.0"]
+	15 -> 26 [label=False]
+	27 [label="Outcome
+No"]
+	16 -> 27 [label=True]
+	28 [label="Outcome
+Yes"]
+	16 -> 28 [label=False]
+	29 [label="Glucose < 114.5"]
+	17 -> 29 [label=True]
+	30 [label="Outcome
+Yes"]
+	17 -> 30 [label=False]
+	31 [label="Pregnancies < 12.5"]
+	18 -> 31 [label=True]
+	32 [label="SkinThickness < 38.5"]
+	18 -> 32 [label=False]
+	33 [label="Age < 22.5"]
+	20 -> 33 [label=True]
+	34 [label="Outcome
+No"]
+	20 -> 34 [label=False]
+	35 [label="DiabetesPedigreeFunction <
+ 0.7305"]
+	21 -> 35 [label=True]
+	36 [label="Outcome
+Yes"]
+	21 -> 36 [label=False]
+	37 [label="Outcome
+No"]
+	23 -> 37 [label=True]
+	38 [label="Outcome
+Yes"]
+	23 -> 38 [label=False]
+	39 [label="Outcome
+No"]
+	24 -> 39 [label=True]
+	40 [label="DiabetesPedigreeFunction <
+ 1.3075"]
+	24 -> 40 [label=False]
+	41 [label="Glucose < 112.5"]
+	25 -> 41 [label=True]
+	42 [label="SkinThickness < 35.5"]
+	25 -> 42 [label=False]
+	43 [label="Glucose < 93.0"]
+	26 -> 43 [label=True]
+	44 [label="Outcome
+No"]
+	26 -> 44 [label=False]
+	45 [label="Outcome
+No"]
+	29 -> 45 [label=True]
+	46 [label="Outcome
+Yes"]
+	29 -> 46 [label=False]
+	47 [label="Outcome
+No"]
+	31 -> 47 [label=True]
+	48 [label="Outcome
+Yes"]
+	31 -> 48 [label=False]
+	49 [label="Glucose < 87.0"]
+	32 -> 49 [label=True]
+	50 [label="Outcome
+No"]
+	32 -> 50 [label=False]
+	51 [label="Glucose < 134.0"]
+	33 -> 51 [label=True]
+	52 [label="Outcome
+Yes"]
+	33 -> 52 [label=False]
+	53 [label="SkinThickness < 32.5"]
+	35 -> 53 [label=True]
+	54 [label="Insulin < 131.0"]
+	35 -> 54 [label=False]
+	55 [label="Insulin < 143.0"]
+	40 -> 55 [label=True]
+	56 [label="Outcome
+No"]
+	40 -> 56 [label=False]
+	57 [label="Outcome
+No"]
+	41 -> 57 [label=True]
+	58 [label="SkinThickness < 5.0"]
+	41 -> 58 [label=False]
+	59 [label="BloodPressure < 65.0"]
+	42 -> 59 [label=True]
+	60 [label="Outcome
+No"]
+	42 -> 60 [label=False]
+	61 [label="Outcome
+No"]
+	43 -> 61 [label=True]
+	62 [label="BloodPressure < 89.0"]
+	43 -> 62 [label=False]
+	63 [label="Pregnancies < 10.5"]
+	49 -> 63 [label=True]
+	64 [label="Outcome
+Yes"]
+	49 -> 64 [label=False]
+	65 [label="Outcome
+No"]
+	51 -> 65 [label=True]
+	66 [label="BloodPressure < 61.0"]
+	51 -> 66 [label=False]
+	67 [label="SkinThickness < 31.5"]
+	53 -> 67 [label=True]
+	68 [label="Pregnancies < 4.0"]
+	53 -> 68 [label=False]
+	69 [label="Outcome
+Yes"]
+	54 -> 69 [label=True]
+	70 [label="BloodPressure < 63.0"]
+	54 -> 70 [label=False]
+	71 [label="Pregnancies < 1.5"]
+	55 -> 71 [label=True]
+	72 [label="Outcome
+Yes"]
+	55 -> 72 [label=False]
+	73 [label="Pregnancies < 2.0"]
+	58 -> 73 [label=True]
+	74 [label="Outcome
+No"]
+	58 -> 74 [label=False]
+	75 [label="Pregnancies < 2.5"]
+	59 -> 75 [label=True]
+	76 [label="DiabetesPedigreeFunction <
+ 1.0890"]
+	59 -> 76 [label=False]
+	77 [label="BMI < 38.4500"]
+	62 -> 77 [label=True]
+	78 [label="Outcome
+No"]
+	62 -> 78 [label=False]
+	79 [label="Outcome
+No"]
+	63 -> 79 [label=True]
+	80 [label="Outcome
+Yes"]
+	63 -> 80 [label=False]
+	81 [label="Outcome
+Yes"]
+	66 -> 81 [label=True]
+	82 [label="Outcome
+No"]
+	66 -> 82 [label=False]
+	83 [label="Insulin < 386.5"]
+	67 -> 83 [label=True]
+	84 [label="Outcome
+Yes"]
+	67 -> 84 [label=False]
+	85 [label="Outcome
+No"]
+	68 -> 85 [label=True]
+	86 [label="DiabetesPedigreeFunction <
+ 0.5495"]
+	68 -> 86 [label=False]
+	87 [label="Outcome
+No"]
+	70 -> 87 [label=True]
+	88 [label="Glucose < 152.5"]
+	70 -> 88 [label=False]
+	89 [label="Outcome
+Yes"]
+	71 -> 89 [label=True]
+	90 [label="Glucose < 192.5"]
+	71 -> 90 [label=False]
+	91 [label="Outcome
+Yes"]
+	73 -> 91 [label=True]
+	92 [label="Outcome
+No"]
+	73 -> 92 [label=False]
+	93 [label="Outcome
+Yes"]
+	75 -> 93 [label=True]
+	94 [label="Glucose < 80.5"]
+	75 -> 94 [label=False]
+	95 [label="DiabetesPedigreeFunction <
+ 0.2150"]
+	76 -> 95 [label=True]
+	96 [label="Outcome
+Yes"]
+	76 -> 96 [label=False]
+	97 [label="BMI < 34.0500"]
+	77 -> 97 [label=True]
+	98 [label="Outcome
+No"]
+	77 -> 98 [label=False]
+	99 [label="BloodPressure < 61.5"]
+	83 -> 99 [label=True]
+	100 [label="Outcome
+Yes"]
+	83 -> 100 [label=False]
+	101 [label="Insulin < 82.5"]
+	86 -> 101 [label=True]
+	102 [label="Outcome
+No"]
+	86 -> 102 [label=False]
+	103 [label="Outcome
+Yes"]
+	88 -> 103 [label=True]
+	104 [label="Pregnancies < 4.5"]
+	88 -> 104 [label=False]
+	105 [label="Outcome
+No"]
+	90 -> 105 [label=True]
+	106 [label="Outcome
+Yes"]
+	90 -> 106 [label=False]
+	107 [label="Outcome
+Yes"]
+	94 -> 107 [label=True]
+	108 [label="Outcome
+No"]
+	94 -> 108 [label=False]
+	109 [label="Outcome
+No"]
+	95 -> 109 [label=True]
+	110 [label="Outcome
+No"]
+	95 -> 110 [label=False]
+	111 [label="Outcome
+Yes"]
+	97 -> 111 [label=True]
+	112 [label="Outcome
+Yes"]
+	97 -> 112 [label=False]
+	113 [label="Outcome
+No"]
+	99 -> 113 [label=True]
+	114 [label="Outcome
+No"]
+	99 -> 114 [label=False]
+	115 [label="Outcome
+No"]
+	101 -> 115 [label=True]
+	116 [label="Outcome
+Yes"]
+	101 -> 116 [label=False]
+	117 [label="Outcome
+Yes"]
+	104 -> 117 [label=True]
+	118 [label="Outcome
+No"]
+	104 -> 118 [label=False]
+}

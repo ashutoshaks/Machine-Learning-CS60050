@@ -1,0 +1,86 @@
+digraph {
+	node [shape=box]
+	0 [label="Glucose < 121.5"]
+	1 [label="Pregnancies < 6.5"]
+	0 -> 1 [label=True]
+	2 [label="Glucose < 160.0"]
+	0 -> 2 [label=False]
+	3 [label="BMI < 26.9500"]
+	1 -> 3 [label=True]
+	4 [label="Outcome
+No"]
+	1 -> 4 [label=False]
+	5 [label="Age < 24.5"]
+	2 -> 5 [label=True]
+	6 [label="Pregnancies < 6.5"]
+	2 -> 6 [label=False]
+	7 [label="Outcome
+No"]
+	3 -> 7 [label=True]
+	8 [label="BMI < 45.4000"]
+	3 -> 8 [label=False]
+	9 [label="Outcome
+No"]
+	5 -> 9 [label=True]
+	10 [label="BloodPressure < 91.0"]
+	5 -> 10 [label=False]
+	11 [label="Age < 30.5"]
+	6 -> 11 [label=True]
+	12 [label="Outcome
+Yes"]
+	6 -> 12 [label=False]
+	13 [label="Age < 29.5"]
+	8 -> 13 [label=True]
+	14 [label="Outcome
+Yes"]
+	8 -> 14 [label=False]
+	15 [label="BMI < 47.2000"]
+	10 -> 15 [label=True]
+	16 [label="Outcome
+Yes"]
+	10 -> 16 [label=False]
+	17 [label="BMI < 28.2000"]
+	11 -> 17 [label=True]
+	18 [label="Outcome
+Yes"]
+	11 -> 18 [label=False]
+	19 [label="SkinThickness < 29.5"]
+	13 -> 19 [label=True]
+	20 [label="Outcome
+No"]
+	13 -> 20 [label=False]
+	21 [label="DiabetesPedigreeFunction <
+ 0.7305"]
+	15 -> 21 [label=True]
+	22 [label="Outcome
+Yes"]
+	15 -> 22 [label=False]
+	23 [label="Outcome
+No"]
+	17 -> 23 [label=True]
+	24 [label="Outcome
+Yes"]
+	17 -> 24 [label=False]
+	25 [label="Glucose < 112.5"]
+	19 -> 25 [label=True]
+	26 [label="Outcome
+No"]
+	19 -> 26 [label=False]
+	27 [label="Outcome
+No"]
+	21 -> 27 [label=True]
+	28 [label="Outcome
+Yes"]
+	21 -> 28 [label=False]
+	29 [label="Outcome
+No"]
+	25 -> 29 [label=True]
+	30 [label="SkinThickness < 5.0"]
+	25 -> 30 [label=False]
+	31 [label="Outcome
+Yes"]
+	30 -> 31 [label=True]
+	32 [label="Outcome
+No"]
+	30 -> 32 [label=False]
+}
