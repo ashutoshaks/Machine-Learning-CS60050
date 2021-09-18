@@ -1,3 +1,7 @@
+# Vanshita Garg - 19CS10064
+# Ashutosh Kumar Singh - 19CS30008
+# Assignment 1
+
 import pandas as pd
 import graphviz
 from utils import find_best_split, split_df_col, get_pred_accuracy

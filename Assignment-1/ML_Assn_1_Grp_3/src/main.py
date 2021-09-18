@@ -1,3 +1,7 @@
+# Vanshita Garg - 19CS10064
+# Ashutosh Kumar Singh - 19CS30008
+# Assignment 1
+
 import argparse
 import pandas as pd
 from decision_tree import DecisionTree
