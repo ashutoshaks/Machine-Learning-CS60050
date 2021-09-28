@@ -6,6 +6,7 @@ class NaiveBayes:
     def __init__(self, alpha: int = 0):
         self.alpha = alpha
 
+
     def fit(self, X_train: np.ndarray, y_train: np.ndarray, label_map: Dict):
         self.num_features = X_train.shape[1]
         self.num_classes = len(label_map)
@@ -14,6 +15,7 @@ class NaiveBayes:
         self.likelihoods = np.empty(shape=(self.num_classes, self.num_features))
 
         self.train(X_train, y_train, label_map)
+
 
     def train(self, train_features: np.ndarray, labels: np.ndarray, label_map: Dict):
         num_examples = labels.shape[0]
@@ -39,9 +41,9 @@ class NaiveBayes:
         # temp = self.likelihoods[:, features == 1]
         # for i in range(3):
         #     print("zero = ", np.sum(temp[i] == 0))
-        probs = np.prod(self.likelihoods[:, features == 1], axis=1)
+        probs = np.prod(self.likelihoods[:, features == 1], axis=1) * self.priors
         # print(probs.shape)
-        probs = probs * self.priors
+        # probs = probs * self.priors
         # print(probs.shape)
         # print(probs)
         return np.argmax(probs)
