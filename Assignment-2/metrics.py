@@ -2,6 +2,7 @@ from typing import List, Tuple, Dict
 import numpy as np
 import pandas as pd
 from scipy import stats
+import math
 
 
 def get_metrics(
@@ -131,3 +132,7 @@ def find_ci_interval(data: np.ndarray, confidence=0.95) -> Tuple[float, float, f
     mean, std = data.mean(axis=0), data.std(axis=0)
     h = std * stats.t.ppf((1+confidence)/2., n-1)
     return mean, (mean-h, mean+h)
+
+def ci(accuracy, n):
+    d = 1.96 * math.sqrt(accuracy * (1 - accuracy) / n)
+    return (accuracy - d, accuracy + d)

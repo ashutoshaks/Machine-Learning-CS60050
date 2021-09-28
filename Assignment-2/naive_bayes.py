@@ -21,7 +21,7 @@ class NaiveBayes:
         num_examples = labels.shape[0]
         
         for i in range(self.num_classes):
-            mask = labels == i
+            mask = (labels == i)
             count_i = np.sum(mask)
             print(count_i)
             # calculate priors

@@ -5,8 +5,6 @@ import numpy as np
 import re
 from nltk.corpus import stopwords
 
-import time
-
 stop_words = set(stopwords.words("english"))
 
 def tokenize(line: str):
@@ -55,32 +53,3 @@ def train_test_split(features: np.ndarray, labels: np.ndarray, train_ratio: floa
     X_test, y_test = features[split_index:], labels[split_index:]
 
     return (X_train, y_train, X_test, y_test)
-
-
-if __name__ == '__main__':
-    start = time.time()
-
-    M, labels, vocab_map, label_map = process_data('train.csv')
-    # print(M.shape)
-    # print(labels.shape)
-    # print(len(vocab_map))
-    # print(label_map)
-
-    X_train, y_train, X_test, y_test = train_test_split(M, labels)
-    # print(X_train.shape)
-    # print(y_train.shape)
-    # print(X_test.shape)
-    # print(y_test.shape)
-    
-    NB = NaiveBayes(alpha=1)
-    NB.fit(X_train, y_train, label_map)
-    print(NB.priors)
-    print(NB.likelihoods)
-
-    print()
-
-    preds = NB.predict(X_test)
-    print(accuracy(y_test, preds))
-
-    end = time.time()
-    print(end - start)
