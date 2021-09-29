@@ -4,6 +4,9 @@ import pandas as pd
 from scipy import stats
 import math
 
+def display_metrics(pred_labels: np.ndarray, true_labels: np.ndarray, label_map: Dict[int, str]):
+    pass
+
 
 def get_metrics(
     y_pred=None,
