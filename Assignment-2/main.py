@@ -1,6 +1,6 @@
 from data_processing import process_data, train_test_split
 from naive_bayes import NaiveBayes
-from metrics import accuracy, ci, display_metrics
+from metrics import accuracy, display_metrics
 import time
 
 def main():
@@ -26,17 +26,19 @@ def main():
     NB = NaiveBayes(alpha=0)
     NB.fit(X_train, y_train, label_map)
     preds, _ = NB.predict(X_test)
-    display_metrics(preds, y_test)
+    # display_metrics(preds, y_test, label_map)
+    print(accuracy(preds, y_test))
 
     print('\n----------- PART 3 - NAIVE BAYES CLASSIFIER WITH LAPLACE CORRECTION -----------\n')
 
     NB_laplace = NaiveBayes(alpha=1)
     NB_laplace.fit(X_train, y_train, label_map)
     preds, _ = NB_laplace.predict(X_test)
-    display_metrics(preds, y_test, label_map)
+    # display_metrics(preds, y_test, label_map)
+    print(accuracy(preds, y_test))
     
     end = time.time()
-    print(f'Total time elapsed: {end - start} seconds')
+    print(f'Total time elapsed: {(end - start):.4f} seconds')
 
 
 if __name__ == '__main__':
