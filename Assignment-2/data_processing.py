@@ -45,7 +45,7 @@ def process_data(file: str) -> Tuple[np.ndarray, np.ndarray, Dict[str, int], Dic
 
     for i, line in enumerate(text_list):
         for word in line:
-            M[i][vocab_map[word]] = 1
+            M[i, vocab_map[word]] = 1
 
     # {'EAP': 0,'HPL': 1,'MWS': 2}
     author_map = {author: i for i, author in enumerate(df['author'].unique())}
