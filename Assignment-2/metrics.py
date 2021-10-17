@@ -1,100 +1,75 @@
+from os import stat
 from typing import List, Tuple, Dict
 import numpy as np
 import pandas as pd
 from scipy import stats
+from tabulate import tabulate
 import math
-
-def display_metrics(pred_labels: np.ndarray, true_labels: np.ndarray, label_map: Dict[int, str]):
-    pass
-
-
-def get_metrics(
-    pred_labels=None,
-    true_labels=None,
-    metrics: List[str] = ['Accuracy'],
-    classes: List[str] = None,
-) -> Dict:
-
-    if isinstance(pred_labels, np.ndarray) == False:
-        pred_labels = pred_labels.to_numpy()
-    if isinstance(true_labels, np.ndarray) == False:
-        true_labels = true_labels.to_numpy()
-
-    results = {}
-
-    for metric in metrics:
-
-        if metric == 'Accuracy':
-            results[metric] = accuracy(pred_labels, true_labels)
-
-        elif metric == 'Precision':
-            results[metric] = np.zeros(len(classes))
-            for i, label in enumerate(classes):
-                results[metric][i] = (precision_score(
-                    pred_labels, true_labels, label=i))
-
-        elif metric == 'Recall':
-            results[metric] = np.zeros(len(classes))
-            for i, label in enumerate(classes):
-                results[metric][i] = (recall_score(
-                    pred_labels, true_labels, label=i))
-
-        elif metric == 'F1':
-            results[metric] = np.zeros(len(classes))
-            for i, label in enumerate(classes):
-                results[metric][i] = (f1_score(
-                    pred_labels, true_labels, label=i))
-
-        elif metric == 'Confusion Matrix':
-            results[metric] = confusion_matrix(
-                pred_labels, true_labels, labels=classes)
-
-        else:
-            raise ValueError('Unknown metric: {}'.format(metric))
-    return results
 
 
 def accuracy(pred_labels, true_labels):
     return np.mean(true_labels == pred_labels)
 
 
-def precision_score(pred_labels, true_labels, label: int):
+def precision(pred_labels, true_labels, label: int):
     true_pos = np.sum(np.logical_and(true_labels == label, pred_labels == label))
-    return true_pos / (np.sum(pred_labels == label) + 1e-7)
+    return true_pos / (np.sum(pred_labels == label) + 1e-8)
 
 
-def recall_score(pred_labels, true_labels, label: int):
+def sensitivity(pred_labels, true_labels, label: int):
     true_pos = np.sum(np.logical_and(true_labels == label, pred_labels == label))
     return true_pos / np.sum(true_labels == label)
 
+def specificity(pred_labels, true_labels, label: int):
+    true_neg = np.sum(np.logical_and(true_labels != label, pred_labels != label))
+    return true_neg / np.sum(true_labels != label)
+
 
 def f1_score(pred_labels, true_labels, label: int):
-    precision = precision_score(pred_labels, true_labels, label)
-    recall = recall_score(pred_labels, true_labels, label)
-    return 2 * (precision * recall) / (precision + recall + 1e-7)
+    p = precision(pred_labels, true_labels, label)
+    r = sensitivity(pred_labels, true_labels, label)
+    return 2 * (p * r) / (p + r + 1e-8)
 
 
-def confusion_matrix(pred_labels, true_labels, labels: List = []):
-    matrix = np.zeros((len(labels), len(labels)))
-    for label, label_name in enumerate(labels):
-        true_pos = np.sum(np.logical_and(true_labels == label, pred_labels == label))
-        matrix[label, label] = true_pos
-        for i, other_label in enumerate(labels):
-            if i != label:
-                matrix[label, i] = np.sum(
-                    np.logical_and(true_labels == label, pred_labels == i))
+def confusion_matrix(pred_labels, true_labels, label_map: Dict):
+    matrix = np.zeros((len(label_map), len(label_map)))
+    for i in range(len(label_map)):
+        for j in range(len(label_map)):
+            matrix[i, j] = np.sum(np.logical_and(pred_labels == i, true_labels == j))
     return matrix
 
 
-def find_ci_interval(data: np.ndarray, confidence=0.95) -> Tuple[float, float, float]:
-    if isinstance(data, np.ndarray) == False:
-        data = np.array(data)
-    n = len(data)
-    mean, std = data.mean(axis=0), data.std(axis=0)
-    h = std * stats.t.ppf((1+confidence)/2., n-1)
-    return mean, (mean-h, mean+h)
-
-
-def ci(accuracy, n):
-    d = 1.96 * math.sqrt(accuracy * (1 - accuracy) / n)
+def ci_95(accuracy, n):
+    d = 1.960 * math.sqrt(accuracy * (1 - accuracy) / n)
     return (accuracy - d, accuracy + d)
+
+
+def display_metrics(pred_labels: np.ndarray, true_labels: np.ndarray, label_map: Dict[int, str]):
+    headers = [name for name in label_map.values()]
+    headers.insert(0, '')
+    statistics = dict()
+    
+    statistics['Precision'] = [precision(pred_labels, true_labels, i) for i in range(len(label_map))]
+    statistics['Sensitivity'] = [sensitivity(pred_labels, true_labels, i) for i in range(len(label_map))]
+    statistics['Specificity'] = [specificity(pred_labels, true_labels, i) for i in range(len(label_map))]
+    statistics['F1-Score'] = [f1_score(pred_labels, true_labels, i) for i in range(len(label_map))]
+
+    stats_list = [];
+    for (key, value) in statistics.items():
+        stats_list.append([key, *value])
+
+    matrix = confusion_matrix(pred_labels, true_labels, label_map)
+    matrix_print = []
+    for (key, value) in label_map.items():
+        matrix_print.append([value, *matrix[key]])
+    print('Confusion Matrix:\n')
+    print(tabulate(matrix_print, headers=headers, tablefmt='presto'))
+
+    print('\nStatistics by Class:\n')
+    print(tabulate(stats_list, headers=headers, floatfmt=".4f", tablefmt='presto'))
+
+    print('\nOverall Statistics:\n')
+    acc = (accuracy(pred_labels, true_labels))
+    ci = ci_95(acc, len(true_labels))
+    print(f'Accuracy: {(acc * 100):.4f}%')
+    print(f'95% Confidence Interval: ({(ci[0] * 100):.4f}%, {(ci[1] * 100):.4f}%)')

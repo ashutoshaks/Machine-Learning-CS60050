@@ -26,19 +26,17 @@ def main():
     NB = NaiveBayes(alpha=0)
     NB.fit(X_train, y_train, label_map)
     preds, _ = NB.predict(X_test)
-    # display_metrics(preds, y_test, label_map)
-    print(accuracy(preds, y_test))
+    display_metrics(preds, y_test, label_map)
 
     print('\n----------- PART 3 - NAIVE BAYES CLASSIFIER WITH LAPLACE CORRECTION -----------\n')
 
     NB_laplace = NaiveBayes(alpha=1)
     NB_laplace.fit(X_train, y_train, label_map)
     preds, _ = NB_laplace.predict(X_test)
-    # display_metrics(preds, y_test, label_map)
-    print(accuracy(preds, y_test))
+    display_metrics(preds, y_test, label_map)
     
     end = time.time()
-    print(f'Total time elapsed: {(end - start):.4f} seconds')
+    print(f'\nTotal time elapsed: {(end - start):.4f} seconds\n')
 
 
 if __name__ == '__main__':
