@@ -1,8 +1,5 @@
-from os import stat
 from typing import List, Tuple, Dict
 import numpy as np
-import pandas as pd
-from scipy import stats
 from tabulate import tabulate
 import math
 
@@ -13,22 +10,47 @@ def accuracy(pred_labels, true_labels):
 
 def precision(pred_labels, true_labels, label: int):
     true_pos = np.sum(np.logical_and(true_labels == label, pred_labels == label))
-    return true_pos / (np.sum(pred_labels == label) + 1e-8)
+    return true_pos / (np.sum(pred_labels == label) + 1e-10)
 
 
 def sensitivity(pred_labels, true_labels, label: int):
     true_pos = np.sum(np.logical_and(true_labels == label, pred_labels == label))
     return true_pos / np.sum(true_labels == label)
 
+
 def specificity(pred_labels, true_labels, label: int):
     true_neg = np.sum(np.logical_and(true_labels != label, pred_labels != label))
     return true_neg / np.sum(true_labels != label)
 
 
+def negative_predictive_value(pred_labels, true_labels, label: int):
+    true_pos = np.sum(np.logical_and(true_labels != label, pred_labels != label))
+    return true_pos / (np.sum(pred_labels != label) + 1e-10)
+
+
 def f1_score(pred_labels, true_labels, label: int):
-    p = precision(pred_labels, true_labels, label)
-    r = sensitivity(pred_labels, true_labels, label)
-    return 2 * (p * r) / (p + r + 1e-8)
+    precision_score = precision(pred_labels, true_labels, label)
+    recall_score = sensitivity(pred_labels, true_labels, label)
+    return 2 * (precision_score * recall_score) / (precision_score + recall_score + 1e-10)
+
+
+def prevalence(pred_labels, true_labels, label: int):
+    return np.sum(true_labels == label) / len(true_labels)
+
+
+def detection_rate(pred_labels, true_labels, label: int):
+    true_pos = np.sum(np.logical_and(true_labels == label, pred_labels == label))
+    return true_pos / len(true_labels)
+
+
+def detection_prevalence(pred_labels, true_labels, label: int):
+    return np.sum(pred_labels == label) / len(pred_labels)
+
+
+def balanced_accuracy(pred_labels, true_labels, label: int):
+    sensitivity_score = sensitivity(pred_labels, true_labels, label)
+    specificity_score = specificity(pred_labels, true_labels, label)
+    return (sensitivity_score + specificity_score) / 2
 
 
 def confusion_matrix(pred_labels, true_labels, label_map: Dict):
@@ -49,10 +71,15 @@ def display_metrics(pred_labels: np.ndarray, true_labels: np.ndarray, label_map:
     headers.insert(0, '')
     statistics = dict()
     
-    statistics['Precision'] = [precision(pred_labels, true_labels, i) for i in range(len(label_map))]
-    statistics['Sensitivity'] = [sensitivity(pred_labels, true_labels, i) for i in range(len(label_map))]
+    statistics['Precision (Positive Predictive Value)'] = [precision(pred_labels, true_labels, i) for i in range(len(label_map))]
+    statistics['Sensitivity (Recall)'] = [sensitivity(pred_labels, true_labels, i) for i in range(len(label_map))]
     statistics['Specificity'] = [specificity(pred_labels, true_labels, i) for i in range(len(label_map))]
+    statistics['Negative Predictive Value'] = [negative_predictive_value(pred_labels, true_labels, i) for i in range(len(label_map))]
     statistics['F1-Score'] = [f1_score(pred_labels, true_labels, i) for i in range(len(label_map))]
+    statistics['Prevalence'] = [prevalence(pred_labels, true_labels, i) for i in range(len(label_map))]
+    statistics['Detection Rate'] = [detection_rate(pred_labels, true_labels, i) for i in range(len(label_map))]
+    statistics['Detection Prevalence'] = [detection_prevalence(pred_labels, true_labels, i) for i in range(len(label_map))]
+    statistics['Balanced Accuracy'] = [balanced_accuracy(pred_labels, true_labels, i) for i in range(len(label_map))]
 
     stats_list = [];
     for (key, value) in statistics.items():
@@ -68,8 +95,18 @@ def display_metrics(pred_labels: np.ndarray, true_labels: np.ndarray, label_map:
     print('\nStatistics by Class:\n')
     print(tabulate(stats_list, headers=headers, floatfmt=".4f", tablefmt='presto'))
 
+    precision_avg = np.sum(statistics['Precision (Positive Predictive Value)']) / len(statistics['Precision (Positive Predictive Value)'])
+    recall_avg = np.sum(statistics['Sensitivity (Recall)']) / len(statistics['Sensitivity (Recall)'])
+    f1_macro_avg = (2 * precision_avg * recall_avg) / (precision_avg + recall_avg)
+
+    print(f'\nAverage Precision: {precision_avg:.4f}')
+    print(f'Average Recall (Sensitivity): {recall_avg:.4f}')
+    print(f'Macro-Averaged F1-Score: {f1_macro_avg:.4f}')
+
     print('\nOverall Statistics:\n')
     acc = (accuracy(pred_labels, true_labels))
     ci = ci_95(acc, len(true_labels))
+    nir = np.max(np.bincount(true_labels)) / len(true_labels)
     print(f'Accuracy: {(acc * 100):.4f}%')
     print(f'95% Confidence Interval: ({(ci[0] * 100):.4f}%, {(ci[1] * 100):.4f}%)')
+    print(f'No Information Rate: {nir:.4f}')
