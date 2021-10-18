@@ -1,12 +1,16 @@
+# Vanshita Garg - 19CS10064
+# Ashutosh Kumar Singh - 19CS30008
+# Machine Learning - Assignment 2
+
+import time
 from data_processing import process_data, train_test_split
 from naive_bayes import NaiveBayes
 from metrics import display_metrics
-import time
-
 
 def main():
     start = time.time()
 
+    # Solve Part 1
     print('\n----------- PART 1 - LOADING AND PROCESSING DATA -----------\n')
 
     M, labels, label_map = process_data('train.csv')
@@ -28,8 +32,10 @@ def main():
     end_2 = time.time()
     print(f'\nTime taken for splitting the dataset: {(end_2 - end_1):.4f} seconds\n')
 
+    # Solve Part 2
     print('\n----------- PART 2 - NAIVE BAYES CLASSIFIER (WITHOUT LAPLACE CORRECTION) -----------\n')
     
+    # Naive Bayes Classifier model without Laplace Correction
     NB = NaiveBayes(alpha=0)
     NB.fit(X_train, y_train, label_map)
     preds, _ = NB.predict(X_test)
@@ -38,8 +44,10 @@ def main():
     end_3 = time.time()
     print(f'\nTime taken for Part 2: {(end_3 - end_2):.4f} seconds\n')
 
+    # Solve Part 3
     print('\n----------- PART 3 - NAIVE BAYES CLASSIFIER WITH LAPLACE CORRECTION -----------\n')
 
+    # Naive Bayes Classifier model with Laplace Correction
     NB_laplace = NaiveBayes(alpha=1)
     NB_laplace.fit(X_train, y_train, label_map)
     preds, _ = NB_laplace.predict(X_test)

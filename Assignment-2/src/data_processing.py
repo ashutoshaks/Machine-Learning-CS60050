@@ -1,8 +1,10 @@
-from typing import Dict, List, Tuple
+# Vanshita Garg - 19CS10064
+# Ashutosh Kumar Singh - 19CS30008
+# Machine Learning - Assignment 2
+
 import pandas as pd
 import numpy as np
 import re
-
 
 # The list of all English stopwords
 stop_words = set(["i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", 
@@ -20,7 +22,7 @@ stop_words = set(["i", "me", "my", "myself", "we", "our", "ours", "ourselves", "
                 "very", "s", "t", "can", "will", "just", "don", "should", "now"])
 
 
-def tokenize(line: str) -> List[str]:
+def tokenize(line):
     """
     Tokenizes a string (sentence) into a list of words after removing the stopwords.
 
@@ -35,7 +37,7 @@ def tokenize(line: str) -> List[str]:
     return filtered_line
 
 
-def process_data(file: str) -> Tuple[np.ndarray, np.ndarray, Dict[int, str]]:
+def process_data(file):
     """
     Constructs the r × c binary feature matrix M where r is the number of examples and c is the 
     size of the vocabulary consisting of distinct words present in the dataset. Each row
@@ -83,7 +85,7 @@ def process_data(file: str) -> Tuple[np.ndarray, np.ndarray, Dict[int, str]]:
     return (M, labels, label_map)
 
 
-def train_test_split(features: np.ndarray, labels: np.ndarray, train_ratio: float = 0.7) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+def train_test_split(features, labels, train_ratio = 0.7):
     """
     Shuffles the data and splits the dataset into a train-test split.
 

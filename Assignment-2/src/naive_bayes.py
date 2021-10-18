@@ -1,6 +1,8 @@
-from typing import Dict, List, Tuple
-import numpy as np
+# Vanshita Garg - 19CS10064
+# Ashutosh Kumar Singh - 19CS30008
+# Machine Learning - Assignment 2
 
+import numpy as np
 
 class NaiveBayes:
     """
@@ -8,7 +10,7 @@ class NaiveBayes:
     for various operations of the classifier.
     """
 
-    def __init__(self, alpha: int = 0) -> None:
+    def __init__(self, alpha = 0):
         """
         Initializes the naive Bayes classifier with proper metadata.
 
@@ -20,7 +22,7 @@ class NaiveBayes:
         self.alpha = alpha
 
 
-    def fit(self, X_train: np.ndarray, y_train: np.ndarray, label_map: Dict[int, str]) -> None:
+    def fit(self, X_train, y_train, label_map):
         """
         Initializes other attributes for the naive Bayes classifier, and calls the train method.
 
@@ -40,7 +42,7 @@ class NaiveBayes:
         self.train(X_train, y_train, label_map)
 
 
-    def train(self, train_features: np.ndarray, labels: np.ndarray, label_map: Dict[int, str]) -> None:
+    def train(self, train_features, labels, label_map):
         """
         Trains the naive Bayes classifier.
 
@@ -57,17 +59,17 @@ class NaiveBayes:
             mask = (labels == i)
             count_i = np.sum(mask)
 
-            # calculate priors
+            # Calculate priors
             self.priors[i] = count_i / num_examples
 
             features_i = train_features[mask]
             occ_cnt = np.sum(features_i, axis = 0)
 
-            # calculate likelihoods
+            # Calculate likelihoods
             self.likelihoods[i] = (occ_cnt + self.alpha) / (features_i.shape[0] + self.alpha * self.num_features)
 
 
-    def predict_one(self, features: np.ndarray) -> Tuple[int, str]:
+    def predict_one(self, features):
         """
         Predicts the classisication of a single sample on the basis of the naive Bayes classifier created.
 
@@ -77,12 +79,14 @@ class NaiveBayes:
         Returns:
             Tuple[int, str]: The label predicted, and the corresponding author name.
         """
+
+        # Calculate the probability for each class using MLE
         probs = np.prod(self.likelihoods[:, features == 1], axis=1) * self.priors
         label = np.argmax(probs)
         return (label, self.label_map[label])
 
 
-    def predict(self, test_features: np.ndarray) -> Tuple[np.ndarray, List[str]]:
+    def predict(self, test_features):
         """
         Predicts the classification on a set of test data.
 

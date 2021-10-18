@@ -1,10 +1,12 @@
-from typing import List, Tuple, Dict
+# Vanshita Garg - 19CS10064
+# Ashutosh Kumar Singh - 19CS30008
+# Machine Learning - Assignment 2
+
 import numpy as np
 from tabulate import tabulate
 import math
 
-
-def accuracy(pred_labels: np.ndarray, true_labels: np.ndarray) -> float:
+def accuracy(pred_labels, true_labels):
     """
     Calculates the accuracy given the predictions and true labels.
     Accuracy = No. of instances correctly classified / Total no. of instances
@@ -20,7 +22,7 @@ def accuracy(pred_labels: np.ndarray, true_labels: np.ndarray) -> float:
     return np.mean(true_labels == pred_labels)
 
 
-def precision(pred_labels: np.ndarray, true_labels: np.ndarray, label: int) -> float:
+def precision(pred_labels, true_labels, label):
     """
     Calculates the precision (positive predictive value) value based on predictions and true labels.
     Precision = True Positive / (True Positive + False Positive)
@@ -39,7 +41,7 @@ def precision(pred_labels: np.ndarray, true_labels: np.ndarray, label: int) -> f
     return true_pos / (np.sum(pred_labels == label) + 1e-10)
 
 
-def sensitivity(pred_labels: np.ndarray, true_labels: np.ndarray, label: int) -> float:
+def sensitivity(pred_labels, true_labels, label):
     """
     Calculates the sensitivity (recall) value based on predictions and true labels.
     Sensitivity = True Positive / (True Positive + False Negative)
@@ -58,7 +60,7 @@ def sensitivity(pred_labels: np.ndarray, true_labels: np.ndarray, label: int) ->
     return true_pos / np.sum(true_labels == label)
 
 
-def specificity(pred_labels: np.ndarray, true_labels: np.ndarray, label: int) -> float:
+def specificity(pred_labels, true_labels, label):
     """
     Calculates the specificity value based on predictions and true labels.
     Specificity = True Negative / (False Positive + True Negative)
@@ -77,7 +79,7 @@ def specificity(pred_labels: np.ndarray, true_labels: np.ndarray, label: int) ->
     return true_neg / np.sum(true_labels != label)
 
 
-def negative_predictive_value(pred_labels: np.ndarray, true_labels: np.ndarray, label: int) -> float:
+def negative_predictive_value(pred_labels, true_labels, label):
     """
     Calculates the negative predicitve value value based on predictions and true labels.
     Negative predicitve value = True Negative / (True Negative + False Negative)
@@ -96,7 +98,7 @@ def negative_predictive_value(pred_labels: np.ndarray, true_labels: np.ndarray, 
     return true_neg / (np.sum(pred_labels != label) + 1e-10)
 
 
-def f1_score(pred_labels: np.ndarray, true_labels: np.ndarray, label: int) -> float:
+def f1_score(pred_labels, true_labels, label):
     """
     Calculates the F1-score based on predictions and true labels.
     It is the harmonic mean of the precision and recall.
@@ -116,7 +118,7 @@ def f1_score(pred_labels: np.ndarray, true_labels: np.ndarray, label: int) -> fl
     return 2 * (precision_score * recall_score) / (precision_score + recall_score + 1e-10)
 
 
-def prevalence(pred_labels: np.ndarray, true_labels: np.ndarray, label: int) -> float:
+def prevalence(pred_labels, true_labels, label):
     """
     Calculates the prevalence value based on predictions and true labels.
     Prevalence is the proportion of all positives in the total number of observations.
@@ -134,7 +136,7 @@ def prevalence(pred_labels: np.ndarray, true_labels: np.ndarray, label: int) -> 
     return np.sum(true_labels == label) / len(true_labels)
 
 
-def detection_rate(pred_labels: np.ndarray, true_labels: np.ndarray, label: int) -> float:
+def detection_rate(pred_labels, true_labels, label):
     """
     Calculates the detection rate value based on predictions and true labels.
     Detection rate is the proportion of true positives in the total number of observations.
@@ -153,7 +155,7 @@ def detection_rate(pred_labels: np.ndarray, true_labels: np.ndarray, label: int)
     return true_pos / len(true_labels)
 
 
-def detection_prevalence(pred_labels: np.ndarray, true_labels: np.ndarray, label: int) -> float:
+def detection_prevalence(pred_labels, true_labels, label):
     """
     Calculates the detection prevalence value based on predictions and true labels.
     Detection prevalence is the number of positive class predictions made as a proportion of all predictions.
@@ -171,7 +173,7 @@ def detection_prevalence(pred_labels: np.ndarray, true_labels: np.ndarray, label
     return np.sum(pred_labels == label) / len(pred_labels)
 
 
-def balanced_accuracy(pred_labels: np.ndarray, true_labels: np.ndarray, label: int) -> float:
+def balanced_accuracy(pred_labels, true_labels, label):
     """
     Calculates the balanced accuracy value based on predictions and true labels.
     Balanced accuracy is the average of the sensitivity and the specificity.
@@ -191,7 +193,7 @@ def balanced_accuracy(pred_labels: np.ndarray, true_labels: np.ndarray, label: i
     return (sensitivity_score + specificity_score) / 2
 
 
-def confusion_matrix(pred_labels: np.ndarray, true_labels: np.ndarray, label_map: Dict) -> np.ndarray:
+def confusion_matrix(pred_labels, true_labels, label_map):
     """
     Calculates and returns the confusion matrix.
 
@@ -212,7 +214,7 @@ def confusion_matrix(pred_labels: np.ndarray, true_labels: np.ndarray, label_map
     return matrix
 
 
-def ci_95(accuracy: float, num_instances: int) -> Tuple[float, float]:
+def ci_95(accuracy, num_instances):
     """
     Calculates the 95% confidence interval of accuracy.
 
@@ -227,7 +229,7 @@ def ci_95(accuracy: float, num_instances: int) -> Tuple[float, float]:
     return (accuracy - d, accuracy + d)
 
 
-def display_metrics(pred_labels: np.ndarray, true_labels: np.ndarray, label_map: Dict[int, str]) -> None:
+def display_metrics(pred_labels, true_labels, label_map):
     """
     Displays all the required metrics in a formatted manner.
 
@@ -272,19 +274,10 @@ def display_metrics(pred_labels: np.ndarray, true_labels: np.ndarray, label_map:
 
     class_avg_stats = [['Average Precision', precision_avg], ['Average Recall (Sensitivity)', recall_avg], ['Macro-Averaged F1-Score', f1_macro_avg]]
     print(tabulate(class_avg_stats, floatfmt=".4f", tablefmt='fancy_grid'))
-    
-    # print(f'\nAverage Precision: {precision_avg:.4f}')
-    # print(f'Average Recall (Sensitivity): {recall_avg:.4f}')
-    # print(f'Macro-Averaged F1-Score: {f1_macro_avg:.4f}')
 
     print('\nOverall Statistics:\n')
     acc = accuracy(pred_labels, true_labels)
     ci = ci_95(acc, len(true_labels))
-    nir = np.max(np.bincount(true_labels)) / len(true_labels)
     
-    overall_stats = [['Accuracy', acc * 100], ['95% Confidence Interval', (ci[0] * 100, ci[1] * 100)], ['No Information Rate', nir]]
+    overall_stats = [['Accuracy', acc * 100], ['95% Confidence Interval', (ci[0] * 100, ci[1] * 100)]]
     print(tabulate(overall_stats, floatfmt=".4f", tablefmt='fancy_grid'))
-
-    # print(f'Accuracy: {(acc * 100):.4f}%')
-    # print(f'95% Confidence Interval: ({(ci[0] * 100):.4f}%, {(ci[1] * 100):.4f}%)')
-    # print(f'No Information Rate: {nir:.4f}')
