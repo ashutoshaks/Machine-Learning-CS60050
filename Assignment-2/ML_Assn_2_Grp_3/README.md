@@ -12,7 +12,7 @@
     - `main.py` - Main file for completing all tasks required.
 
 - `output.txt` - The output for a run of the Naive Bayes Classifier.
-- `ML_Assn_2_Report.pdf` - A report containing the step-wise description of the implementation and analysis of results .
+- `ML_Assn_2_Report.pdf` - A report containing the step-wise description of the implementation and analysis of results.
 - `README.md` - A README file describing the files present and the instructions to execute the code.
 
 
