@@ -66,7 +66,6 @@ class NaiveBayes:
             occ_cnt = np.sum(features_i, axis = 0)
 
             # Calculate likelihoods
-            # self.likelihoods[i] = (occ_cnt + self.alpha) / (features_i.shape[0] + self.alpha * self.num_features)
             self.likelihoods[i] = (occ_cnt + self.alpha) / (np.sum(occ_cnt) + self.alpha * self.num_features)
 
 
