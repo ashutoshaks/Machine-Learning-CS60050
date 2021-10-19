@@ -80,7 +80,7 @@ class NaiveBayes:
             Tuple[int, str]: The label predicted, and the corresponding author name.
         """
 
-        # Calculate the probability for each class using MLE
+        # Calculate the posterior probability for each class
         probs = np.prod(self.likelihoods[:, features == 1], axis=1) * self.priors
         label = np.argmax(probs)
         return (label, self.label_map[label])
