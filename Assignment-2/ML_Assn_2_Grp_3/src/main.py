@@ -1,6 +1,6 @@
+# Machine Learning - Assignment 2
 # Vanshita Garg - 19CS10064
 # Ashutosh Kumar Singh - 19CS30008
-# Machine Learning - Assignment 2
 
 import time
 from data_processing import process_data, train_test_split
