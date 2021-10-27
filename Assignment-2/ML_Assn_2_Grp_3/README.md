@@ -8,7 +8,6 @@
     - `data_processing.py` - Contains necessary functions to process the raw textual data into tokenized words and create the binary feature matrix.
     - `naive_bayes.py` - Contains the model for the Naive Bayes Classifier.
     - `metrics.py` - Contains the functions to evaluate the performance of the model.
-    - `utils.py` - Contains all helper functions required.
     - `main.py` - Main file for completing all tasks required.
 
 - `output.txt` - The output for a run of the Naive Bayes Classifier.
