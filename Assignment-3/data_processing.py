@@ -8,8 +8,9 @@ def read_data() -> None:
     df_3 = pd.read_csv('occupancy_data/datatest2.txt')
 
     df = pd.concat([df_1, df_2, df_3])
-    df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d %H:%M:%S')
-    df['date'] = df['date'].apply(lambda date: (date - date.replace(hour=0, minute=0, second=0, microsecond=0)).total_seconds())
+    df.drop('date', axis=1, inplace=True)
+    # df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d %H:%M:%S')
+    # df['date'] = df['date'].apply(lambda date: (date - date.replace(hour=0, minute=0, second=0, microsecond=0)).total_seconds())
     X = df.iloc[:, :-1].to_numpy()
     y = df.iloc[:, -1].to_numpy()
     return X, y
@@ -36,12 +37,3 @@ def normalize(X_train: np.ndarray, X_valid: np.ndarray, X_test: np.ndarray) -> T
     X_valid = (X_valid - X_train_mean) / X_train_std
     X_test = (X_test - X_train_mean) / X_train_std
     return X_train, X_valid, X_test
-
-
-if __name__ == '__main__':
-    X, y = read_data()
-    print(X.shape)
-    (X_train, y_train, X_valid, y_valid, X_test, y_test) = split_data(X, y)
-    print(X_train.shape, y_train.shape)
-    print(X_valid.shape, y_valid.shape)
-    print(X_test.shape, y_test.shape)
