@@ -6,9 +6,6 @@ from svm import choose_best_SVM
 from tabulate import tabulate
 
 def main():
-    # random.seed(0)
-    # np.random.seed(0)
-
     print('\n---------------- PART 1 - LOADING, SPLITTING AND PROCESSING DATA ----------------\n')
     
     X, y = read_data()
@@ -49,7 +46,7 @@ def main():
     plot_LDA(X_train_lda, y_train)
 
     print('\n---------------- PART 3 - FINDING BEST SVM AFTER LDA ----------------\n')
-    best_svm, results, ind = choose_best_SVM(X_train_lda, y_train, X_valid_lda, y_valid, True)
+    best_svm, results, ind = choose_best_SVM(X_train_lda, y_train, X_valid_lda, y_valid)
 
     print(tabulate(results, headers=['kernel', 'gamma', 'degree', 'accuracy'], floatfmt=".4f", tablefmt='fancy_grid'))
     print('\nKernel parameters for highest validation set accuracy:')

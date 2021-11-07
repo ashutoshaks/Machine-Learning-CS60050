@@ -8,9 +8,9 @@ def read_data():
     Returns:
         Tuple[np.ndarray, np.ndarray]: The feature vector and the labels.
     """
-    df_1 = pd.read_csv('./occupancy_data/datatraining.txt')
-    df_2 = pd.read_csv('./occupancy_data/datatest.txt')
-    df_3 = pd.read_csv('./occupancy_data/datatest2.txt')
+    df_1 = pd.read_csv('../occupancy_data/datatraining.txt')
+    df_2 = pd.read_csv('../occupancy_data/datatest.txt')
+    df_3 = pd.read_csv('../occupancy_data/datatest2.txt')
 
     df = pd.concat([df_1, df_2, df_3])
     df.drop('date', axis=1, inplace=True)

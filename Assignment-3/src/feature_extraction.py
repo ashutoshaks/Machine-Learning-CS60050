@@ -70,8 +70,7 @@ def plot_PCA(X, y):
     plt.title('Training Data after PCA')
     plt.xlabel('PC1')
     plt.ylabel('PC2')
-    plt.savefig('./plots/pca.png')
-    # plt.show()
+    plt.savefig('../plots/pca.png')
     plt.clf()
 
 
@@ -88,6 +87,5 @@ def plot_LDA(X, y):
     plt.title('Training Data after LDA')
     plt.xlabel('X')
     plt.yticks([])
-    plt.savefig('./plots/lda.png')
-    # plt.show()
+    plt.savefig('../plots/lda.png')
     plt.clf()
