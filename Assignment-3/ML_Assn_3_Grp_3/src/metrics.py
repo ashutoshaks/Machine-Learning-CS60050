@@ -221,7 +221,7 @@ def display_metrics(pred_labels, true_labels):
 
         label_map (Dict): A dictionary mapping labels to author names.
     """
-    headers = [1, 0]
+    headers = [0, 1]
     headers.insert(0, '')
     statistics = dict()
     
@@ -242,7 +242,7 @@ def display_metrics(pred_labels, true_labels):
     matrix = confusion_matrix(pred_labels, true_labels)
     matrix_print = []
     for label in [0, 1]:
-        matrix_print.append([1 - label, *matrix[label]])
+        matrix_print.append([label, *matrix[label]])
     print('\nConfusion Matrix:\n')
     print(tabulate(matrix_print, headers=headers, tablefmt='fancy_grid'))
 
