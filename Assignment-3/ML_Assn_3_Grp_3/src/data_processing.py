@@ -1,3 +1,7 @@
+# Machine Learning - Assignment 3
+# Vanshita Garg - 19CS10064
+# Ashutosh Kumar Singh - 19CS30008
+
 import pandas as pd
 import numpy as np
 

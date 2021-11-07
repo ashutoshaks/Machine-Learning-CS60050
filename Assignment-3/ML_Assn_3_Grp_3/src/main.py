@@ -1,4 +1,7 @@
-import random
+# Machine Learning - Assignment 3
+# Vanshita Garg - 19CS10064
+# Ashutosh Kumar Singh - 19CS30008
+
 from data_processing import read_data, split_data, normalize
 from feature_extraction import perform_PCA, perform_LDA, plot_LDA, plot_PCA
 from metrics import display_metrics

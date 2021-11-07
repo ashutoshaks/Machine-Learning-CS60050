@@ -1,3 +1,7 @@
+# Machine Learning - Assignment 3
+# Vanshita Garg - 19CS10064
+# Ashutosh Kumar Singh - 19CS30008
+
 from sklearn.svm import SVC
 
 def choose_best_SVM(X_train, y_train, X_valid, y_valid):

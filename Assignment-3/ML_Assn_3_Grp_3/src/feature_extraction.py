@@ -1,3 +1,7 @@
+# Machine Learning - Assignment 3
+# Vanshita Garg - 19CS10064
+# Ashutosh Kumar Singh - 19CS30008
+
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
