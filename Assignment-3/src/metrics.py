@@ -184,8 +184,6 @@ def confusion_matrix(pred_labels, true_labels):
 
         true_labels (np.ndarray): The true labels for the test data.
 
-        label_map (Dict): A dictionary mapping labels to author names.
-
     Returns:
         np.ndarray: The confusion matrix.
     """
@@ -202,6 +200,7 @@ def ci_95(accuracy, num_instances):
 
     Args:
         accuracy (float): The accuracy value.
+        
         num_instances (int): The number of instances.
 
     Returns:
@@ -254,5 +253,5 @@ def display_metrics(pred_labels, true_labels):
     acc = accuracy(pred_labels, true_labels)
     ci = ci_95(acc, len(true_labels))
     
-    overall_stats = [['Accuracy', acc * 100], ['95% Confidence Interval', (ci[0] * 100, ci[1] * 100)]]
+    overall_stats = [['Accuracy', round(acc * 100, 4)], ['95% Confidence Interval', (round(ci[0] * 100, 4), round(ci[1] * 100, 4))]]
     print(tabulate(overall_stats, floatfmt=".4f", tablefmt='fancy_grid'))
