@@ -18,6 +18,7 @@
 - `plots` directory:
     - `pca.png` - Reduced 2-D data for the train split after PCA.
     - `lda.png` - Reduced 1-D data for the train split after LDA.
+    - `pca_scree.png` - Scree plot for PCA.
 
 - `output.txt` - The output for a run of the entire code.
 
@@ -34,3 +35,4 @@
 - Execute the file `main.py`  
 `python main.py`
 - The relevant output will be displayed on the terminal or console.
+- The plots will be created and saved in the `plots` directory.
