@@ -51,8 +51,6 @@ def choose_best_SVM(X_train, y_train, X_valid, y_valid):
             results.append(['poly', gamma, degree])
 
     for i, svm in enumerate(svm_list):
-        if results[i][0] == 'poly' and results[i][1] == 1 and results[i][2] == 4:
-            results[i].append(67)
         svm.fit(X_train, y_train)
         results[i].append(svm.score(X_valid, y_valid) * 100)
 

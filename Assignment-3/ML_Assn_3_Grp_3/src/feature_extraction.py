@@ -22,7 +22,7 @@ def perform_PCA(X_train, X_valid, X_test, n_components = 2):
         n_components (int, optional): Number of components to keep. Defaults to 2.
 
     Returns:
-        Tuple[np.ndarray, np.ndarray, np.ndarray]: Transformed training, validation, and test data
+        Tuple[np.ndarray, np.ndarray, np.ndarray, PCA]: Transformed training, validation, and test data, and the PCA object
     """
     pca = PCA(n_components=n_components)
     pca.fit(X_train)
@@ -30,7 +30,7 @@ def perform_PCA(X_train, X_valid, X_test, n_components = 2):
     X_valid_pca = pca.transform(X_valid)
     X_test_pca = pca.transform(X_test)
 
-    return X_train_pca, X_valid_pca, X_test_pca
+    return X_train_pca, X_valid_pca, X_test_pca, pca
 
 
 def perform_LDA(X_train, y_train, X_valid, X_test, n_components: int = 1):
@@ -50,7 +50,7 @@ def perform_LDA(X_train, y_train, X_valid, X_test, n_components: int = 1):
         n_components (int, optional): Number of components to keep. Defaults to 1.
 
     Returns:
-        Tuple[np.ndarray, np.ndarray, np.ndarray]: Transformed training, validation, and test data
+        Tuple[np.ndarray, np.ndarray, np.ndarray, LinearDiscriminantAnalysis]: Transformed training, validation, and test data, and the LDA object
     """
     lda = LinearDiscriminantAnalysis(n_components=n_components)
     lda.fit(X_train, y_train)
@@ -58,7 +58,7 @@ def perform_LDA(X_train, y_train, X_valid, X_test, n_components: int = 1):
     X_valid_lda = lda.transform(X_valid)
     X_test_lda = lda.transform(X_test)
 
-    return X_train_lda, X_valid_lda, X_test_lda
+    return X_train_lda, X_valid_lda, X_test_lda, lda
 
 
 def plot_PCA(X, y):
@@ -77,6 +77,26 @@ def plot_PCA(X, y):
     plt.savefig('../plots/pca.png')
     plt.clf()
 
+
+def scree_plot_pca(pca):
+    """
+    Plots the scree plot of the PCA object.
+
+    Args:
+        pca (PCA): PCA object
+    """
+    per_var = np.round(pca.explained_variance_ratio_ * 100, decimals=1)
+    print('\nPercentage of Explained Variance:')
+    print(f'PC1: {per_var[0]}%\nPC2: {per_var[1]}%')
+    labels = ['PC' + str(x) for x in range(1, len(per_var) + 1)]
+    plt.bar(x=range(1, len(per_var) + 1), height=per_var, width=0.6, tick_label=labels)
+    for i, v in enumerate(per_var):
+        plt.text(x = i + 0.9, y = v + 0.7, s = str(v) + '%', size = 10)
+    plt.xlabel('Principal Component')
+    plt.ylabel('Percentage of Variance')
+    plt.title('Scree Plot')
+    plt.savefig('../plots/pca_scree.png')
+    plt.clf()
 
 def plot_LDA(X, y): 
     """

@@ -3,7 +3,7 @@
 # Ashutosh Kumar Singh - 19CS30008
 
 from data_processing import read_data, split_data, normalize
-from feature_extraction import perform_PCA, perform_LDA, plot_LDA, plot_PCA
+from feature_extraction import perform_PCA, perform_LDA, plot_LDA, plot_PCA, scree_plot_pca
 from metrics import display_metrics
 from svm import choose_best_SVM
 from tabulate import tabulate
@@ -20,17 +20,18 @@ def main():
 
     print('\n---------------- PART 2 - PERFORMING PRINCIPAL COMPONENT ANALYSIS ----------------\n')
     
-    X_train_pca, X_valid_pca, X_test_pca = perform_PCA(X_train, X_valid, X_test)
+    X_train_pca, X_valid_pca, X_test_pca, pca = perform_PCA(X_train, X_valid, X_test)
     print(f'Shape of X_train_pca: {X_train_pca.shape}')
     print(f'Shape of X_valid_pca: {X_valid_pca.shape}')
     print(f'Shape of X_test_pca: {X_test_pca.shape}')
     plot_PCA(X_train_pca, y_train)
+    scree_plot_pca(pca)
 
     print('\n---------------- PART 3 - FINDING BEST SVM AFTER PCA ----------------\n')
     best_svm, results, ind = choose_best_SVM(X_train_pca, y_train, X_valid_pca, y_valid)
 
     print(tabulate(results, headers=['kernel', 'gamma', 'degree', 'accuracy'], floatfmt=".4f", tablefmt='fancy_grid'))
-    print('Kernel parameters for highest validation set accuracy:')
+    print('\nKernel parameters for highest validation set accuracy:')
     print(f'kernel: {results[ind][0]}, gamma: {results[ind][1]}, degree: {results[ind][2]}')
     print(f'Validation set accuracy: {results[ind][3]:.4f}')
     best_svm.fit(X_train_pca, y_train)
@@ -42,14 +43,14 @@ def main():
 
     print('\n---------------- PART 4 - PERFORMING LINEAR DISCRIMINANT ANALYSIS ----------------\n')
     
-    X_train_lda, X_valid_lda, X_test_lda = perform_LDA(X_train, y_train, X_valid, X_test)
+    X_train_lda, X_valid_lda, X_test_lda, lda = perform_LDA(X_train, y_train, X_valid, X_test)
     print(f'Shape of X_train_lda: {X_train_lda.shape}')
     print(f'Shape of X_valid_lda: {X_valid_lda.shape}')
     print(f'Shape of X_test_lda: {X_test_lda.shape}')    
     plot_LDA(X_train_lda, y_train)
 
-    print('\n---------------- PART 3 - FINDING BEST SVM AFTER LDA ----------------\n')
-    best_svm, results, ind = choose_best_SVM(X_train_lda, y_train, X_valid_lda, y_valid)
+    print('\n---------------- PART 5 - FINDING BEST SVM AFTER LDA ----------------\n')
+    best_svm, results, ind = choose_best_SVM(X_train_lda, y_train, X_valid_lda, y_valid, True)
 
     print(tabulate(results, headers=['kernel', 'gamma', 'degree', 'accuracy'], floatfmt=".4f", tablefmt='fancy_grid'))
     print('\nKernel parameters for highest validation set accuracy:')
